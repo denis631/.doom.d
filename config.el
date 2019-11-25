@@ -101,9 +101,10 @@
         work-journal-path (concat org-directory "work-journal.org"))
 
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline private-todo-path "Inbox")
+        '(("t" "Templates for private todos")
+         ("tt" "Todo" entry (file+headline private-todo-path "Inbox")
            "* [ ] %?")
-          ("T" "Todo with Link" entry (file+headline private-todo-path "Inbox")
+          ("tl" "Todo with Link" entry (file+headline private-todo-path "Inbox")
            "* [ ] %?\n%a")
           ("n" "Note" entry (file+headline private-notes-path "Notes")
            "* NOTE %?")
@@ -115,7 +116,7 @@
           ("wl" "Work todo with link" entry (file+headline work-todo-path "Tasks")
            "* [ ] %?\n%a")
           ("wq" "Work question" entry (file+headline work-todo-path "Tasks")
-           "* [ ] %?")
+           "* [?] %?")
           ("wql" "Work question with link" entry (file+headline work-todo-path "Tasks")
            "* [?] %?\n%a")
           ("wj" "Work Journal" entry (file+datetree work-journal-path)
