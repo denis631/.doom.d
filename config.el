@@ -38,6 +38,10 @@
 (after! rustic
   (setq rustic-format-on-save t))
 
+;; Go config
+(setq gofmt-command "goimports")
+(add-hook 'before-save-hook 'gofmt-before-save)
+
 ;; (mac-auto-operator-composition-mode)
 ;; Treemacs
 ;; --------
