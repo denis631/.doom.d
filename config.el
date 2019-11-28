@@ -142,7 +142,7 @@
   (setq avy-all-windows t)
   (map! :leader
         :desc "Jump to char"
-        "/ c"
+        "j c"
         #'avy-goto-char-timer))
 
 (use-package! frog-jump-buffer
@@ -150,7 +150,7 @@
   (setq frog-jump-buffer-include-current-buffer nil)
   (map! :leader
         :desc "Frog-Jump to buffer"
-        "b j"
+        "j b"
         #'frog-jump-buffer))
 
 (use-package! super-save
