@@ -29,21 +29,14 @@
 
  '(treemacs-root-face ((t (:inherit variable-pitch)))))
 
-;;;; Golang support
-;; (defun my-go-mode-hook ()
-;;   (whitespace-mode -1) ; don't highlight hard tabs
-;;   (add-hook 'before-save-hook 'gofmt-before-save)
-;;   (setq
-;;    gofmt-command "goimports"
-;;    tab-width 2         ; display tabs as two-spaces
-;;    indent-tabs-mode 1  ; use hard tabs to indent
-;;    fill-column 100)    ; set a reasonable fill width
-;;   )
+;; Rust
+;;----
+(use-package! toml-mode)
+(use-package! rust-mode
+  :hook (rust-mode . lsp))
 
-;; (add-hook 'go-mode-hook 'my-go-mode-hook)
-
-;; (add-hook! prog-mode
-           ;; (whitespace-mode))
+(after! rustic
+  (setq rustic-format-on-save t))
 
 ;; (mac-auto-operator-composition-mode)
 ;; Treemacs

@@ -8,8 +8,14 @@
 
 (package! avy)
 (package! super-save)
-(package! swift-mode)
-(package! lsp-sourcekit)
 (package! frog-jump-buffer)
 
+;; swift
+(package! swift-mode)
+(package! lsp-sourcekit)
+
+;; rust
+(package! toml-mode)
+
+;; misc
 (package! thrift)
