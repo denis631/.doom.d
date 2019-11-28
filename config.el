@@ -7,7 +7,8 @@
 
 ;; UI
 ;; (load-theme 'chocolate)
-(setq doom-theme 'doom-city-lights)
+(setq doom-theme 'doom-nord)
+(setq nord-uniform-mode-lines t)
 
 (custom-set-variables
  '(org-agenda-files '("~/Library/Mobile Documents/com~apple~CloudDocs/Notes/todo.org"))
