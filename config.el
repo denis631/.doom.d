@@ -8,16 +8,11 @@
 ;; UI
 ;; (load-theme 'chocolate)
 (setq doom-theme 'doom-nord)
-(setq nord-uniform-mode-lines t)
 
-(custom-set-variables
- '(org-agenda-files '("~/Library/Mobile Documents/com~apple~CloudDocs/Notes/todo.org"))
- '(org-fontify-done-headline t))
+(setq doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
+      doom-variable-pitch-font (font-spec :family "Avenir Next"))
 
 (custom-set-faces
- '(default ((t (:height 150 :family "Ubuntu Mono derivative Powerline"))))
- '(variable-pitch ((t (:family "Avenir Next"))))
-
  ;; org-mode
  '(org-agenda-done ((t (:inherit org-done))))
  '(org-headline-done ((t (:foreground "alternatingContentBackgroundColor" :strike-through t))))
@@ -26,9 +21,7 @@
  '(org-property-value        ((t (:inherit fixed-pitch))) t)
  '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
  '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
-
- '(treemacs-root-face ((t (:inherit variable-pitch)))))
+ '(org-verbatim              ((t (:inherit (shadow fixed-pitch))))))
 
 ;; Rust
 ;;----
@@ -39,38 +32,10 @@
 (after! rustic
   (setq rustic-format-on-save t))
 
-;; Go config
+;; Go
+;; --
 (setq gofmt-command "goimports")
 (add-hook 'before-save-hook 'gofmt-before-save)
-
-;; (mac-auto-operator-composition-mode)
-;; Treemacs
-;; --------
-;; (use-package! treemacs
-;;   :config
-;;   (use-package! treemacs-evil
-;;     :demand t)
-
-;;   (use-package! treemacs-projectile
-;;     :demand t)
-
-;;   ;; Enable custom treemacs theme (all-the-icons must be installed!)
-;;   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-;;   (doom-themes-treemacs-config)
-
-;;   (treemacs-follow-mode t)
-;;   (treemacs-filewatch-mode t)
-;;   (treemacs-git-mode 'deferred)
-;;   (treemacs-toggle-fixed-width)
-
-;;   (setq treemacs-width 35
-;;         treemacs-git-integration t
-;;         treemacs-never-persist nil
-;;         treemacs-goto-tag-strategy 'refresh-index
-;;         treemacs-sorting 'alphabetic-desc
-;;         treemacs-display-in-side-window t
-;;         treemacs-indentation-string (propertize " " 'face 'font-lock-comment-face)
-;;         treemacs-indentation 1))
 
 ;; Org Mode
 ;; --------
@@ -88,6 +53,8 @@
   (setq org-fancy-priorities-list '("ASAP" "SOON" "NO PRESSURE" "MAYBE")))
 
 (after! org
+  (setq org-fontify-done-headline t)
+
   ;; org-bullets
   (setq org-bullets-bullet-list '("•"))
 
@@ -97,6 +64,8 @@
         private-notes-path (concat org-directory "note.org")
         work-todo-path (concat org-directory "work-todo.org")
         work-journal-path (concat org-directory "work-journal.org"))
+
+  (setq org-agenda-files (list private-todo-path))
 
   (setq org-capture-templates
         '(("t" "Templates for private todos")

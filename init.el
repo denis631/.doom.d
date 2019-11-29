@@ -36,8 +36,8 @@
         +defaults)       ; default popup rules
        ;;pretty-code       ; replace bits of code with pretty symbols
        ;;tabs              ; an tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
-       ;;unicode           ; extended unicode support for various languages
+       ;;treemacs          ; a project drawer, like neotree but cooler
+       unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        window-select     ; visually switch windows
@@ -176,31 +176,3 @@
        ;; provides a Spacemacs-inspired keybinding scheme and a smartparens
        ;; config. Use it as a reference for your own modules.
        (default +bindings +smartparens))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("1728dfd9560bff76a7dc6c3f61e9f4d3e6ef9d017a83a841c117bd9bebe18613" "12fa03b34bfd9c96bd577299b6767bfa16afbfc8a8f666d2a0ec16255320b531" "0d087b2853473609d9efd2e9fbeac088e89f36718c4a4c89c568dd1b628eae41" "c8f959fb1ea32ddfc0f50db85fea2e7d86b72bb4d106803018be1c3566fd6c72" "70ed3a0f434c63206a23012d9cdfbe6c6d4bb4685ad64154f37f3c15c10f3b90" "2277b74ae6f5aa018aa0057ef89752163e34fcb09ab6242f169c1740a72ca27a" default)))
- '(org-agenda-files
-   (quote
-    ("~/Library/Mobile Documents/com~apple~CloudDocs/Notes/todo.org")))
- '(org-fontify-done-headline t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 170 :family "Ubuntu Mono derivative Powerline"))))
- '(org-agenda-done ((t (:inherit org-done))))
- '(org-block ((t (:inherit fixed-pitch))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-headline-done ((t (:foreground "alternatingContentBackgroundColor" :strike-through t))))
- '(org-property-value ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(treemacs-root-face ((t (:inherit variable-pitch))))
- '(variable-pitch ((t (:family "Avenir Next")))))
