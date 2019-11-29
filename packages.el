@@ -10,10 +10,6 @@
 (package! super-save)
 (package! frog-jump-buffer)
 
-;; swift
-(package! swift-mode)
-(package! lsp-sourcekit)
-
 ;; rust
 (package! toml-mode)
 
