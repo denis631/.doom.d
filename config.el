@@ -7,10 +7,9 @@
 
 ;; UI
 ;; (load-theme 'chocolate)
-(setq doom-theme 'doom-nord)
-
-(setq doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
-      doom-variable-pitch-font (font-spec :family "Avenir Next"))
+(setq doom-theme 'doom-nord
+      doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
+      display-line-numbers-type 'relative)
 
 (custom-set-faces
  ;; org-mode
@@ -54,6 +53,13 @@
 
 (after! org
   (setq org-fontify-done-headline t)
+
+  (setq org-tags-column -120)
+
+  ;; workflow
+  (setq org-todo-keywords '((sequence "PROJ(P)" "|" "DONE(d)") ;; project
+                            ;; (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
+                            (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
 
   ;; org-bullets
   (setq org-bullets-bullet-list '("•"))
