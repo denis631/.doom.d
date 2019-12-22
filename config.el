@@ -112,20 +112,12 @@
   (advice-add #'counsel-rg :around #'doom-set-jump-a)
   (map! "C-x b" #'counsel-switch-buffer))
 
-;; avy
-(after! avy
-  (setq avy-all-windows t)
-  (map! :leader
-        :desc "Jump to char"
-        "j c"
-        #'avy-goto-char-timer))
-
 (use-package! frog-jump-buffer
   :config
   (setq frog-jump-buffer-include-current-buffer nil)
   (map! :leader
         :desc "Frog-Jump to buffer"
-        "j b"
+        "b j"
         #'frog-jump-buffer))
 
 (use-package! super-save
