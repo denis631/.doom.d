@@ -57,7 +57,7 @@
   (setq org-tags-column -120)
 
   ;; workflow
-  (setq org-todo-keywords '((sequence "PROJ(P)" "|" "DONE(d)") ;; project
+  (setq org-todo-keywords '((sequence "PROJ(P)" "HOLD(H)" "|" "DONE(d)") ;; project
                             ;; (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
                             (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
 
