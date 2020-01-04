@@ -87,6 +87,9 @@
 ;; remove red highlighting after 80 chars
 (delq! 'lines-tail whitespace-style)
 
+;; stop poluting the clipboard
+(setq interprogram-cut-function nil)
+
 (add-hook! org-mode
   (setq! prettify-symbols-alist '(("[ ]" . ?☐) ("[X]" . ?☑) ("[-]" . ?❍)))
   (prettify-symbols-mode)
