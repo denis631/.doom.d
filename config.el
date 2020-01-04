@@ -6,21 +6,10 @@
 (define-key key-translation-map "\C-t" "\C-x")
 
 ;; UI
-;; (load-theme 'chocolate)
-(setq doom-theme 'doom-nord
+
+(setq doom-theme 'chocolate
       doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
       display-line-numbers-type 'relative)
-
-(custom-set-faces
- ;; org-mode
- '(org-agenda-done ((t (:inherit org-done))))
- '(org-headline-done ((t (:foreground "alternatingContentBackgroundColor" :strike-through t))))
- '(org-block                 ((t (:inherit fixed-pitch))))
- '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
- '(org-property-value        ((t (:inherit fixed-pitch))) t)
- '(org-special-keyword       ((t (:inherit (font-lock-comment-face fixed-pitch)))))
- '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-verbatim              ((t (:inherit (shadow fixed-pitch))))))
 
 ;; Rust
 ;;----
@@ -104,6 +93,12 @@
   (org-bullets-mode))
 
 ;; NAVIGATION
+;; ivy
+(after! ivy-posframe
+  (setf (alist-get t ivy-posframe-display-functions-alist)
+        #'ivy-posframe-display-at-frame-center)
+  (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
+
 ;; counsel
 (after! counsel
   (add-to-list 'ivy-update-fns-alist '(counsel-imenu . auto))

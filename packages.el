@@ -6,12 +6,16 @@
 ;; (package! another-package :recipe (:host github :repo "username/repo"))
 ;; (package! builtin-package :disable t)
 
+;; ui
+(package! chocolate :recipe (:host github :repo "SavchenkoValeriy/emacs-chocolate-theme"))
+
+;; navigation
 (package! avy)
-(package! super-save)
 (package! frog-jump-buffer)
 
-;; rust
+;; programming
 (package! toml-mode)
+(package! thrift)
 
 ;; misc
-(package! thrift)
+(package! super-save)
