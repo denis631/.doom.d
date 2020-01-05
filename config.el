@@ -6,13 +6,19 @@
 (define-key key-translation-map "\C-t" "\C-x")
 
 ;; UI
-
 (setq doom-theme 'chocolate
       doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
       display-line-numbers-type 'relative)
 
+;; Company
+(use-package! company-tabnine
+  :config
+  (setq company-idle-delay 0))
+
+(add-to-list 'company-backends #'company-tabnine)
+
 ;; Rust
-;;----
+;; ---
 (use-package! toml-mode)
 (use-package! rust-mode
   :hook (rust-mode . lsp))
