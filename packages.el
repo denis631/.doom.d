@@ -14,7 +14,6 @@
 (package! frog-jump-buffer)
 
 ;; programming
-(package! company-tabnine)
 (package! toml-mode)
 (package! thrift)
 
