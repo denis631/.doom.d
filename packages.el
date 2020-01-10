@@ -7,7 +7,7 @@
 ;; (package! builtin-package :disable t)
 
 ;; ui
-(package! chocolate :recipe (:host github :repo "SavchenkoValeriy/emacs-chocolate-theme"))
+(package! chocolate-theme)
 
 ;; navigation
 (package! avy)
