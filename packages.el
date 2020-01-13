@@ -10,7 +10,6 @@
 (package! chocolate-theme)
 
 ;; navigation
-(package! avy)
 (package! frog-jump-buffer)
 
 ;; programming

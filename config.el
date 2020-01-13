@@ -107,6 +107,9 @@
   (add-to-list 'ivy-update-fns-alist '(counsel-rg . auto))
   (advice-add #'counsel-imenu :around #'doom-set-jump-a)
   (advice-add #'counsel-rg :around #'doom-set-jump-a)
+
+  ;; no sorting for imenu items
+  (add-to-list 'ivy-sort-functions-alist '(counsel-imenu))
   (map! "C-x b" #'counsel-switch-buffer))
 
 (use-package! frog-jump-buffer
