@@ -63,7 +63,7 @@
 
   (setq org-capture-templates
         '(("t" "Templates for private todos")
-         ("tt" "Todo" entry (file+headline private-todo-path "Inbox")
+          ("tt" "Todo" entry (file+headline private-todo-path "Inbox")
            "* [ ] %?")
           ("tl" "Todo with Link" entry (file+headline private-todo-path "Inbox")
            "* [ ] %?\n%a")
@@ -81,24 +81,31 @@
           ("wql" "Work question with link" entry (file+headline work-todo-path "Tasks")
            "* [?] %?\n%a")
           ("wj" "Work Journal" entry (file+datetree work-journal-path)
-           "* %U %?\n%i\n"))))
+           "* %U %?\n%i\n")))
+
+  (set-pretty-symbols!
+    'org-mode :alist '(("[ ]" . ?☐)
+                       ("[X]" . ?☑)
+                       ("[-]" . ?❍))))
 
 ;; remove red highlighting after 80 chars
 (delq! 'lines-tail whitespace-style)
 
-;; stop poluting the clipboard
-(setq interprogram-cut-function nil)
-
 (add-hook! org-mode
-  (setq! prettify-symbols-alist '(("[ ]" . ?☐) ("[X]" . ?☑) ("[-]" . ?❍)))
   (prettify-symbols-mode)
-  (org-bullets-mode))
+  (org-bullets-mode)
+  (org-fancy-priorities-mode))
 
 ;; NAVIGATION
+;; evil
+(after! evil
+  (advice-add #'evil-next-line :after #'evil-scroll-line-to-center)
+  (advice-add #'evil-previous-line :after #'evil-scroll-line-to-center))
+
 ;; ivy
 (after! ivy-posframe
   (setf (alist-get t ivy-posframe-display-functions-alist)
-        #'ivy-posframe-display-at-frame-center)
+        #'ivy-posframe-display-at-frame-top-center)
   (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
 
 ;; counsel

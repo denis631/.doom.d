@@ -8,6 +8,7 @@
 
 ;; ui
 (package! chocolate-theme)
+(package! org-fancy-priorities)
 
 ;; navigation
 (package! frog-jump-buffer)
