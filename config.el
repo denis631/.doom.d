@@ -2,12 +2,9 @@
 
 ;; Place your private configuration here
 
-;; Dvorak mode
-(define-key key-translation-map "\C-t" "\C-x")
-
 ;; UI
 (setq doom-theme 'chocolate
-      doom-font (font-spec :family "Ubuntu Mono derivative Powerline" :size 16)
+      doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 15)
       display-line-numbers-type 'relative)
 
 ;; Rust
