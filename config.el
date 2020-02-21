@@ -132,5 +132,13 @@
 (after! vterm
   (map! :map vterm-mode-map "C-c C-x" #'vterm--self-insert)
   (map! :map vterm-mode-map "C-c y" #'vterm--self-insert)
-  (map! :map vterm-mode-map "C-c n" #'vterm--self-insert)
-  (map! :map vterm-mode-map "C-c RET" #'vterm--self-insert ))
+  (map! :map vterm-mode-map "C-c n" #'vterm--self-insert))
+
+(setq xwidget-webkit-enable-plugins t)
+
+(defun compilation--default-buffer-name (_) "default-buffer-name")
+
+(with-eval-after-load 'gif-screencast
+  (setq gif-screencast-args '("-x")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
+  (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
+  (setq gif-screencast-capture-format "ppm")) ;; Optional: Required to crop captured images.
