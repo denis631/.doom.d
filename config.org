@@ -1,32 +1,57 @@
-;;; .doom.d/config.el -*- lexical-binding: t; -*-
+#+TITLE: My doom emacs config
 
-;; Place your private configuration here
+* Table of Content                                                                                                 :TOC:
+- [[#ui][UI]]
+- [[#programming][Programming]]
+  - [[#rust][Rust]]
+  - [[#go][Go]]
+- [[#org][Org]]
+  - [[#misc][misc]]
+  - [[#fancy-priorities][fancy priorities]]
+  - [[#core][core]]
+  - [[#org-mode][org-mode]]
+- [[#navigation][Navigation]]
+  - [[#evil][evil]]
+  - [[#counsel][counsel]]
+  - [[#ivy][ivy]]
+  - [[#frog-jump][frog-Jump]]
+- [[#misc-1][Misc]]
+  - [[#remove-red-highlighting-after-80-chars][remove red highlighting after 80 chars]]
+  - [[#super-save][super-save]]
+  - [[#vterm][vterm]]
+  - [[#webkit][webkit]]
+  - [[#pdf-tools-fix][pdf-tools fix]]
+  - [[#gif-screencast][gif screencast]]
 
-;; UI
+* UI
+#+BEGIN_SRC elisp
 (setq doom-theme 'chocolate
       doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 15)
       display-line-numbers-type 'relative)
-
-;; Rust
-;; ---
+#+END_SRC
+* Programming
+** Rust
+#+BEGIN_SRC elisp
 (use-package! toml-mode)
 (use-package! rust-mode
   :hook (rust-mode . lsp))
 
 (after! rustic
   (setq rustic-format-on-save t))
-
-;; Go
-;; --
+#+END_SRC
+** Go
+#+BEGIN_SRC elisp
 (setq gofmt-command "goimports")
 (add-hook 'before-save-hook 'gofmt-before-save)
-
-;; Org Mode
-;; --------
-;; Corrects (and improves) org-mode's native fontification.
+#+END_SRC
+* Org
+** misc
+#+BEGIN_SRC elisp
 (doom-themes-org-config)
 (setq doom-scratch-buffer-major-mode 'org-mode)
-
+#+END_SRC
+** fancy priorities
+#+BEGIN_SRC elisp
 (after! org-fancy-priorities
   (setq org-lowest-priority 68)
   (setq org-priority-faces
@@ -35,7 +60,9 @@
           (?C . success)
           (?D . success)))
   (setq org-fancy-priorities-list '("ASAP" "SOON" "NO PRESSURE" "MAYBE")))
-
+#+END_SRC
+** core
+#+BEGIN_SRC elisp
 (after! org
   (setq org-fontify-done-headline t)
 
@@ -84,28 +111,23 @@
     'org-mode :alist '(("[ ]" . ?☐)
                        ("[X]" . ?☑)
                        ("[-]" . ?❍))))
-
-;; remove red highlighting after 80 chars
-(delq! 'lines-tail whitespace-style)
-
+#+END_SRC
+** org-mode
+#+BEGIN_SRC elisp
 (add-hook! org-mode
   (prettify-symbols-mode)
   (org-bullets-mode)
   (org-fancy-priorities-mode))
-
-;; NAVIGATION
-;; evil
+#+END_SRC
+* Navigation
+** evil
+#+BEGIN_SRC elisp
 (after! evil
   (advice-add #'evil-next-line :after #'evil-scroll-line-to-center)
   (advice-add #'evil-previous-line :after #'evil-scroll-line-to-center))
-
-;; ivy
-(after! ivy-posframe
-  (setf (alist-get t ivy-posframe-display-functions-alist)
-        #'ivy-posframe-display-at-frame-top-center)
-  (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
-
-;; counsel
+#+END_SRC
+** counsel
+#+BEGIN_SRC elisp
 (after! counsel
   (add-to-list 'ivy-update-fns-alist '(counsel-imenu . auto))
   (add-to-list 'ivy-update-fns-alist '(counsel-rg . auto))
@@ -115,7 +137,16 @@
   ;; no sorting for imenu items
   (add-to-list 'ivy-sort-functions-alist '(counsel-imenu))
   (map! "C-x b" #'counsel-switch-buffer))
-
+#+END_SRC
+** ivy
+#+BEGIN_SRC elisp
+(after! ivy-posframe
+  (setf (alist-get t ivy-posframe-display-functions-alist)
+        #'ivy-posframe-display-at-frame-top-center)
+  (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
+#+END_SRC
+** frog-Jump
+#+BEGIN_SRC elisp
 (use-package! frog-jump-buffer
   :config
   (setq frog-jump-buffer-include-current-buffer nil)
@@ -123,22 +154,38 @@
         :desc "Frog-Jump to buffer"
         "b j"
         #'frog-jump-buffer))
-
+#+END_SRC
+* Misc
+** remove red highlighting after 80 chars
+#+BEGIN_SRC elisp
+(delq! 'lines-tail whitespace-style)
+#+END_SRC
+** super-save
+#+BEGIN_SRC elisp
 (use-package! super-save
   :config
   (super-save-mode +1)
   (setq super-save-auto-save-when-idle t))
-
+#+END_SRC
+** vterm
+#+BEGIN_SRC elisp
 (after! vterm
   (map! :map vterm-mode-map "C-c C-x" #'vterm--self-insert)
   (map! :map vterm-mode-map "C-c y" #'vterm--self-insert)
   (map! :map vterm-mode-map "C-c n" #'vterm--self-insert))
-
+#+END_SRC
+** webkit
+#+BEGIN_SRC elisp
 (setq xwidget-webkit-enable-plugins t)
-
+#+END_SRC
+** pdf-tools fix
+#+BEGIN_SRC elisp
 (defun compilation--default-buffer-name (_) "default-buffer-name")
-
+#+END_SRC
+** gif screencast
+#+BEGIN_SRC elisp
 (with-eval-after-load 'gif-screencast
   (setq gif-screencast-args '("-x")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
   (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
   (setq gif-screencast-capture-format "ppm")) ;; Optional: Required to crop captured images.
+#+END_SRC
