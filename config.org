@@ -14,7 +14,7 @@
   - [[#evil][evil]]
   - [[#counsel][counsel]]
   - [[#ivy][ivy]]
-  - [[#frog-jump][frog-Jump]]
+  - [[#frog-jump][frog-jump]]
 - [[#misc-1][Misc]]
   - [[#remove-red-highlighting-after-80-chars][remove red highlighting after 80 chars]]
   - [[#super-save][super-save]]
@@ -28,6 +28,7 @@
 (setq doom-theme 'chocolate
       doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 15)
       display-line-numbers-type 'relative)
+(add-to-list 'default-frame-alist '(alpha . 95))
 #+END_SRC
 * Programming
 ** Rust
@@ -59,7 +60,7 @@
           (?B . warning)
           (?C . success)
           (?D . success)))
-  (setq org-fancy-priorities-list '("ASAP" "SOON" "NO PRESSURE" "MAYBE")))
+  (setq org-fancy-priorities-list '("ASAP " "SOON " "CHILL" "MAYBE")))
 #+END_SRC
 ** core
 #+BEGIN_SRC elisp
@@ -70,7 +71,7 @@
 
   ;; workflow
   (setq org-todo-keywords '((sequence "PROJ(P)" "HOLD(H)" "|" "DONE(d)") ;; project
-                            ;; (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
+                            (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
                             (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
 
   ;; org-bullets
@@ -145,7 +146,7 @@
         #'ivy-posframe-display-at-frame-top-center)
   (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
 #+END_SRC
-** frog-Jump
+** frog-jump
 #+BEGIN_SRC elisp
 (use-package! frog-jump-buffer
   :config
