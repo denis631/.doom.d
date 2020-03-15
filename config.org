@@ -190,3 +190,16 @@
   (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
   (setq gif-screencast-capture-format "ppm")) ;; Optional: Required to crop captured images.
 #+END_SRC
+** dimmer
+#+BEGIN_SRC elisp
+(defun company-box-p ()
+  (string-prefix-p " *company-box-" (buffer-name)))
+
+(use-package! dimmer
+  :defer 1
+  :config
+  (setq dimmer-fraction 0.7
+        dimmer-prevent-dimming-predicates '(window-minibuffer-p company-box-p))
+  (dimmer-configure-posframe)
+  (dimmer-mode t))
+#+END_SRC

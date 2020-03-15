@@ -20,3 +20,4 @@
 ;; misc
 (package! super-save)
 (package! gif-screencast)
+(package! dimmer)
