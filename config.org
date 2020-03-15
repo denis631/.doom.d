@@ -6,9 +6,9 @@
   - [[#rust][Rust]]
   - [[#go][Go]]
 - [[#org][Org]]
+  - [[#core][core]]
   - [[#misc][misc]]
   - [[#fancy-priorities][fancy priorities]]
-  - [[#core][core]]
   - [[#org-mode][org-mode]]
 - [[#navigation][Navigation]]
   - [[#evil][evil]]
@@ -22,6 +22,7 @@
   - [[#webkit][webkit]]
   - [[#pdf-tools-fix][pdf-tools fix]]
   - [[#gif-screencast][gif screencast]]
+  - [[#dimmer][dimmer]]
 
 * UI
 #+BEGIN_SRC elisp
@@ -46,24 +47,10 @@
 (add-hook 'before-save-hook 'gofmt-before-save)
 #+END_SRC
 * Org
-** misc
-#+BEGIN_SRC elisp
-(doom-themes-org-config)
-(setq doom-scratch-buffer-major-mode 'org-mode)
-#+END_SRC
-** fancy priorities
-#+BEGIN_SRC elisp
-(after! org-fancy-priorities
-  (setq org-lowest-priority 68)
-  (setq org-priority-faces
-        '((?A . error)
-          (?B . warning)
-          (?C . success)
-          (?D . success)))
-  (setq org-fancy-priorities-list '("ASAP " "SOON " "CHILL" "MAYBE")))
-#+END_SRC
 ** core
 #+BEGIN_SRC elisp
+(setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Notes/")
+
 (after! org
   (setq org-fontify-done-headline t)
 
@@ -77,7 +64,6 @@
   ;; org-bullets
   (setq org-bullets-bullet-list '("•"))
 
-  (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Notes/")
   ;; org-capture
   (setq private-todo-path (concat org-directory "todo.org")
         private-notes-path (concat org-directory "note.org")
@@ -89,18 +75,18 @@
   (setq org-capture-templates
         '(("t" "Templates for private todos")
           ("tt" "Todo" entry (file+headline private-todo-path "Inbox")
-           "* [ ] %?")
+           "* TODO %?")
           ("tl" "Todo with Link" entry (file+headline private-todo-path "Inbox")
-           "* [ ] %?\n%a")
+           "* TODO %?\n%a")
           ("n" "Note" entry (file+headline private-notes-path "Notes")
            "* NOTE %?")
 
           ;; define work prefix/group
           ("w" "Templates for work")
           ("wt" "Work todo" entry (file+headline work-todo-path "Tasks")
-           "* [ ] %?")
+           "* TODO %?")
           ("wl" "Work todo with link" entry (file+headline work-todo-path "Tasks")
-           "* [ ] %?\n%a")
+           "* TODO %?\n%a")
           ("wq" "Work question" entry (file+headline work-todo-path "Tasks")
            "* [?] %?")
           ("wql" "Work question with link" entry (file+headline work-todo-path "Tasks")
@@ -113,11 +99,28 @@
                        ("[X]" . ?☑)
                        ("[-]" . ?❍))))
 #+END_SRC
+** misc
+#+BEGIN_SRC elisp
+(doom-themes-org-config)
+(setq doom-scratch-buffer-major-mode 'org-mode)
+#+END_SRC
+** fancy priorities
+#+BEGIN_SRC elisp
+(after! org-fancy-priorities
+  (setq org-highest-priority ?A
+        org-lowest-priority ?D
+        org-priority-faces '((?A . error)
+                             (?B . warning)
+                             (?C . success)
+                             (?D . success))
+        org-fancy-priorities-list '((?A . "ASAP ")
+                                    (?B . "SOON ")
+                                    (?C . "CHILL")
+                                    (?D . "MAYBE"))))
+#+END_SRC
 ** org-mode
 #+BEGIN_SRC elisp
 (add-hook! org-mode
-  (prettify-symbols-mode)
-  (org-bullets-mode)
   (org-fancy-priorities-mode))
 #+END_SRC
 * Navigation
