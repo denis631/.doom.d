@@ -23,6 +23,7 @@
   - [[#pdf-tools-fix][pdf-tools fix]]
   - [[#gif-screencast][gif screencast]]
   - [[#dimmer][dimmer]]
+  - [[#daemon][daemon]]
 
 * UI
 #+BEGIN_SRC elisp
@@ -74,12 +75,12 @@
 
   (setq org-capture-templates
         '(("t" "Templates for private todos")
-          ("tt" "Todo" entry (file+headline private-todo-path "Inbox")
+          ("tt" "Todo" entry (file+headline private-todo-path "To be estimated/refined")
            "* TODO %?")
-          ("tl" "Todo with Link" entry (file+headline private-todo-path "Inbox")
+          ("tl" "Todo with Link" entry (file+headline private-todo-path "To be estimated/refined")
            "* TODO %?\n%a")
           ("n" "Note" entry (file+headline private-notes-path "Notes")
-           "* NOTE %?")
+           "* %^{Type of link|ARTICLE|VIDEO|PAPER|BOOK} %a\n %?\n %i")
 
           ;; define work prefix/group
           ("w" "Templates for work")
@@ -205,4 +206,8 @@
         dimmer-prevent-dimming-predicates '(window-minibuffer-p company-box-p))
   (dimmer-configure-posframe)
   (dimmer-mode t))
+#+END_SRC
+** daemon
+#+BEGIN_SRC elisp
+(server-start)
 #+END_SRC
