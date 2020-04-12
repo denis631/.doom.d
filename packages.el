@@ -16,6 +16,7 @@
 ;; programming
 (package! toml-mode)
 (package! thrift)
+(package! restclient)
 
 ;; misc
 (package! super-save)
