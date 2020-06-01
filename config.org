@@ -1,15 +1,15 @@
 #+TITLE: My doom emacs config
 
-* Table of Content                                                                                                 :TOC:
+* Table of Content                                                                                                :TOC:
 - [[#ui][UI]]
 - [[#programming][Programming]]
   - [[#rust][Rust]]
   - [[#go][Go]]
 - [[#org][Org]]
   - [[#core][core]]
-  - [[#misc][misc]]
   - [[#fancy-priorities][fancy priorities]]
-  - [[#org-mode][org-mode]]
+  - [[#hook][hook]]
+  - [[#misc][misc]]
 - [[#navigation][Navigation]]
   - [[#evil][evil]]
   - [[#counsel][counsel]]
@@ -23,13 +23,13 @@
   - [[#pdf-tools-fix][pdf-tools fix]]
   - [[#gif-screencast][gif screencast]]
   - [[#dimmer][dimmer]]
-  - [[#daemon][daemon]]
 
 * UI
 #+BEGIN_SRC elisp
 (setq doom-theme 'chocolate
-      doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 15)
-      display-line-numbers-type 'relative)
+      doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 13)
+      display-line-numbers-type nil
+      evil-respect-visual-line-mode t)
 (add-to-list 'default-frame-alist '(alpha . 95))
 #+END_SRC
 * Programming
@@ -55,15 +55,15 @@
 (after! org
   (setq org-fontify-done-headline t)
 
+  ;; latex-size increase
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
   (setq org-tags-column -120)
 
   ;; workflow
   (setq org-todo-keywords '((sequence "PROJ(P)" "HOLD(H)" "|" "DONE(d)") ;; project
                             (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
                             (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
-
-  ;; org-bullets
-  (setq org-bullets-bullet-list '("•"))
 
   ;; org-capture
   (setq private-todo-path (concat org-directory "todo.org")
@@ -76,11 +76,12 @@
   (setq org-capture-templates
         '(("t" "Templates for private todos")
           ("tt" "Todo" entry (file+headline private-todo-path "To be estimated/refined")
-           "* TODO %?")
+           "* TODO %? %^G")
           ("tl" "Todo with Link" entry (file+headline private-todo-path "To be estimated/refined")
-           "* TODO %?\n%a")
+           "* TODO %? %^G\n%a")
+
           ("n" "Note" entry (file+headline private-notes-path "Notes")
-           "* %^{Type of link|ARTICLE|VIDEO|PAPER|BOOK} %a\n %?\n %i")
+           "* %^{Type of link|ARTICLE|VIDEO|PAPER|BOOK|PODCAST|UNI-COURSE} %a %^G\n %?\n %i")
 
           ;; define work prefix/group
           ("w" "Templates for work")
@@ -100,11 +101,6 @@
                        ("[X]" . ?☑)
                        ("[-]" . ?❍))))
 #+END_SRC
-** misc
-#+BEGIN_SRC elisp
-(doom-themes-org-config)
-(setq doom-scratch-buffer-major-mode 'org-mode)
-#+END_SRC
 ** fancy priorities
 #+BEGIN_SRC elisp
 (after! org-fancy-priorities
@@ -119,10 +115,18 @@
                                     (?C . "CHILL")
                                     (?D . "MAYBE"))))
 #+END_SRC
-** org-mode
+** hook
 #+BEGIN_SRC elisp
 (add-hook! org-mode
   (org-fancy-priorities-mode))
+#+END_SRC
+** misc
+#+BEGIN_SRC elisp
+(after! org-superstar
+  (setq org-superstar-headline-bullets-list '("•")))
+
+(doom-themes-org-config)
+(setq doom-scratch-buffer-major-mode 'org-mode)
 #+END_SRC
 * Navigation
 ** evil
@@ -139,8 +143,6 @@
   (advice-add #'counsel-imenu :around #'doom-set-jump-a)
   (advice-add #'counsel-rg :around #'doom-set-jump-a)
 
-  ;; no sorting for imenu items
-  (add-to-list 'ivy-sort-functions-alist '(counsel-imenu))
   (map! "C-x b" #'counsel-switch-buffer))
 #+END_SRC
 ** ivy
@@ -148,7 +150,9 @@
 (after! ivy-posframe
   (setf (alist-get t ivy-posframe-display-functions-alist)
         #'ivy-posframe-display-at-frame-top-center)
-  (set-face-attribute 'ivy-posframe nil :foreground "#C7AE9D" :background "#261D1F"))
+  (setq ivy-posframe-width 151
+        ivy-posframe-parameters `((min-width . ,ivy-posframe-width)
+                                  (min-height . ,ivy-height))))
 #+END_SRC
 ** frog-jump
 #+BEGIN_SRC elisp
@@ -182,6 +186,37 @@
 ** webkit
 #+BEGIN_SRC elisp
 (setq xwidget-webkit-enable-plugins t)
+
+(defun xwidget-webkit-callback--load-changed (title)
+  (xwidget-log "webkit finished loading: '%s'" title)
+  ;;TODO - check the native/internal scroll
+  ;;(xwidget-adjust-size-to-content xwidget)
+  (xwidget-webkit-adjust-size-to-window xwidget)
+  (rename-buffer (format "*xwidget webkit: %s *" title)))
+
+(defun xwidget-webkit-callback (xwidget xwidget-event-type)
+  "Callback for xwidgets.
+XWIDGET instance, XWIDGET-EVENT-TYPE depends on the originating xwidget."
+  (if (not (buffer-live-p (xwidget-buffer xwidget)))
+      (xwidget-log
+       "error: callback called for xwidget with dead buffer")
+    (with-current-buffer (xwidget-buffer xwidget)
+      (cond ((eq xwidget-event-type 'load-changed)
+             (xwidget-webkit-execute-script
+              xwidget "document.title"
+              'xwidget-webkit-callback--load-changed)
+             (pop-to-buffer (current-buffer)))
+            ((eq xwidget-event-type 'decide-policy)
+             (let ((strarg  (nth 3 last-input-event)))
+               (if (string-match ".*#\\(.*\\)" strarg)
+                   (xwidget-webkit-show-id-or-named-element
+                    xwidget
+                    (match-string 1 strarg)))))
+            ((eq xwidget-event-type 'javascript-callback)
+             (let ((proc (nth 3 last-input-event))
+                   (arg  (nth 4 last-input-event)))
+               (funcall proc arg)))
+            (t (xwidget-log "unhandled event:%s" xwidget-event-type))))))
 #+END_SRC
 ** pdf-tools fix
 #+BEGIN_SRC elisp
@@ -196,18 +231,14 @@
 #+END_SRC
 ** dimmer
 #+BEGIN_SRC elisp
-(defun company-box-p ()
-  (string-prefix-p " *company-box-" (buffer-name)))
-
 (use-package! dimmer
-  :defer 1
+  :defer 3
   :config
   (setq dimmer-fraction 0.7
-        dimmer-prevent-dimming-predicates '(window-minibuffer-p company-box-p))
+        dimmer-prevent-dimming-predicates '(window-minibuffer-p))
   (dimmer-configure-posframe)
+  (dimmer-configure-company-box)
+  (dimmer-configure-magit)
+  (dimmer-configure-org)
   (dimmer-mode t))
-#+END_SRC
-** daemon
-#+BEGIN_SRC elisp
-(server-start)
 #+END_SRC

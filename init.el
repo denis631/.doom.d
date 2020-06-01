@@ -18,7 +18,9 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy                ; a search engine for love and life
-        +childframe)
+        +childframe
+        +fuzzy
+        +icons)
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -62,7 +64,11 @@
        :emacs
        dired               ; making dired pretty [functional]
        electric            ; smarter, keyword-based electric-indent
+       (ibuffer            ; buffer management
+        +icons)
        vc                  ; version-control and Emacs, sitting in a tree
+       (undo               ; the undo-tree
+        +tree)
 
        :term
        ;;eshell            ; a consistent, cross-platform shell (WIP)
@@ -82,7 +88,7 @@
        (lookup             ; helps you navigate your code and documentation
         +docsets)          ; ...or in Dash docsets locally
        lsp
-       ;;macos             ; MacOS-specific commands
+       macos               ; MacOS-specific commands
        magit               ; a git porcelain for Emacs
        make                ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -122,10 +128,10 @@
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       javascript          ; all(hope(abandon(ye(who(enter(here))))))
+       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       latex               ; writing papers in Emacs has never been so fun
        ;;lean
        ;;ledger            ; an accounting system in Emacs
        ;;lua               ; one-based indices? one-based indices
@@ -149,7 +155,8 @@
        ;;ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust               ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
         +lsp)
-       ;;scala             ; java, but good
+       (scala              ; java, but good
+        +lsp)
        ;;scheme            ; a fully conniving family of lisps
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.

@@ -7,8 +7,9 @@
 ;; (package! builtin-package :disable t)
 
 ;; ui
-(package! chocolate-theme)
 (package! org-fancy-priorities)
+(package! autothemer)
+(package! chocolate :recipe (:local-repo "ui"))
 
 ;; navigation
 (package! frog-jump-buffer)
@@ -17,6 +18,7 @@
 (package! toml-mode)
 (package! thrift)
 (package! restclient)
+(package! llvm-mode :recipe (:local-repo "lang/llvm"))
 
 ;; misc
 (package! super-save)
