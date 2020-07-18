@@ -2,9 +2,10 @@
 
 * Table of Content                                                                                                :TOC:
 - [[#ui][UI]]
+  - [[#doom-properties][doom properties]]
+  - [[#lightdark-theme][light/dark theme]]
 - [[#programming][Programming]]
   - [[#rust][Rust]]
-  - [[#go][Go]]
 - [[#org][Org]]
   - [[#core][core]]
   - [[#fancy-priorities][fancy priorities]]
@@ -14,7 +15,6 @@
   - [[#evil][evil]]
   - [[#counsel][counsel]]
   - [[#ivy][ivy]]
-  - [[#frog-jump][frog-jump]]
 - [[#misc-1][Misc]]
   - [[#remove-red-highlighting-after-80-chars][remove red highlighting after 80 chars]]
   - [[#super-save][super-save]]
@@ -23,14 +23,32 @@
   - [[#pdf-tools-fix][pdf-tools fix]]
   - [[#gif-screencast][gif screencast]]
   - [[#dimmer][dimmer]]
+  - [[#restclient][restclient]]
 
 * UI
+** doom properties
 #+BEGIN_SRC elisp
 (setq doom-theme 'chocolate
       doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 13)
       display-line-numbers-type nil
       evil-respect-visual-line-mode t)
 (add-to-list 'default-frame-alist '(alpha . 95))
+#+END_SRC
+** light/dark theme
+#+BEGIN_SRC elisp
+(setq is-dark-mode-applescript "osascript -e \'tell application \"System Events\" to tell appearance preferences to return dark mode\'")
+
+(defun adjust-color-theme-to-os-theme ()
+  (interactive)
+  (let ((expected-theme (if (string= (string-trim (shell-command-to-string is-dark-mode-applescript)) "true")
+                           'doom-horizon
+                           'chocolate)))
+    (unless (string= doom-theme expected-theme)
+      (load-theme expected-theme t)
+      (doom/reload-theme))))
+
+;; run a timer every minute in order to adjust the color theme
+(run-with-timer 0 600 #'adjust-color-theme-to-os-theme)
 #+END_SRC
 * Programming
 ** Rust
@@ -41,11 +59,6 @@
 
 (after! rustic
   (setq rustic-format-on-save t))
-#+END_SRC
-** Go
-#+BEGIN_SRC elisp
-(setq gofmt-command "goimports")
-(add-hook 'before-save-hook 'gofmt-before-save)
 #+END_SRC
 * Org
 ** core
@@ -133,7 +146,14 @@
 #+BEGIN_SRC elisp
 (after! evil
   (advice-add #'evil-next-line :after #'evil-scroll-line-to-center)
-  (advice-add #'evil-previous-line :after #'evil-scroll-line-to-center))
+  (advice-add #'evil-previous-line :after #'evil-scroll-line-to-center)
+
+  ;; use dvorak keys instead
+  (setq evil-escape-key-sequence "hk")
+
+  ;; change to programmer-dvorak when in insert mode
+  (add-hook! 'evil-insert-state-entry-hook
+    (activate-input-method "programmer-dvorak")))
 #+END_SRC
 ** counsel
 #+BEGIN_SRC elisp
@@ -153,16 +173,6 @@
   (setq ivy-posframe-width 151
         ivy-posframe-parameters `((min-width . ,ivy-posframe-width)
                                   (min-height . ,ivy-height))))
-#+END_SRC
-** frog-jump
-#+BEGIN_SRC elisp
-(use-package! frog-jump-buffer
-  :config
-  (setq frog-jump-buffer-include-current-buffer nil)
-  (map! :leader
-        :desc "Frog-Jump to buffer"
-        "b j"
-        #'frog-jump-buffer))
 #+END_SRC
 * Misc
 ** remove red highlighting after 80 chars
@@ -237,8 +247,18 @@ XWIDGET instance, XWIDGET-EVENT-TYPE depends on the originating xwidget."
   (setq dimmer-fraction 0.7
         dimmer-prevent-dimming-predicates '(window-minibuffer-p))
   (dimmer-configure-posframe)
-  (dimmer-configure-company-box)
   (dimmer-configure-magit)
   (dimmer-configure-org)
+  (dimmer-configure-which-key)
+  (dimmer-configure-hydra)
+
+  ;; in order to ignore all company box windows
+  (add-to-list
+   'dimmer-exclusion-regexp-list "^ \\*company-box-1*\\*$")
+
   (dimmer-mode t))
+#+END_SRC
+** restclient
+#+BEGIN_SRC elisp
+(add-to-list 'auto-mode-alist (cons "\\.restclient\\'" 'restclient-mode))
 #+END_SRC

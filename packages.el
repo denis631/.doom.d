@@ -11,14 +11,12 @@
 (package! autothemer)
 (package! chocolate :recipe (:local-repo "ui"))
 
-;; navigation
-(package! frog-jump-buffer)
-
 ;; programming
 (package! toml-mode)
 (package! thrift)
 (package! restclient)
 (package! llvm-mode :recipe (:local-repo "lang/llvm"))
+(package! yaml-mode)
 
 ;; misc
 (package! super-save)
