@@ -5,6 +5,7 @@
   - [[#doom-properties][doom properties]]
   - [[#lightdark-theme][light/dark theme]]
 - [[#programming][Programming]]
+  - [[#lsp][LSP]]
   - [[#rust][Rust]]
 - [[#org][Org]]
   - [[#core][core]]
@@ -41,7 +42,7 @@
 (defun adjust-color-theme-to-os-theme ()
   (interactive)
   (let ((expected-theme (if (string= (string-trim (shell-command-to-string is-dark-mode-applescript)) "true")
-                           'doom-horizon
+                           'doom-nord
                            'chocolate)))
     (unless (string= doom-theme expected-theme)
       (load-theme expected-theme t)
@@ -51,6 +52,11 @@
 (run-with-timer 0 600 #'adjust-color-theme-to-os-theme)
 #+END_SRC
 * Programming
+** LSP
+#+BEGIN_SRC elisp
+(after! lsp
+  (setq lsp-eldoc-enable-hover nil))
+#+END_SRC
 ** Rust
 #+BEGIN_SRC elisp
 (use-package! toml-mode)
@@ -153,7 +159,7 @@
 
   ;; change to programmer-dvorak when in insert mode
   (add-hook! 'evil-insert-state-entry-hook
-    (activate-input-method "programmer-dvorak")))
+    (activate-input-method "english-dvorak")))
 #+END_SRC
 ** counsel
 #+BEGIN_SRC elisp

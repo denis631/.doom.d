@@ -38,7 +38,7 @@
        (popup              ; tame sudden yet inevitable temporary windows
         +all               ; catch all popups that start with an asterix
         +defaults)         ; default popup rules
-       (pretty-code        ; replace bits of code with pretty symbols
+       (ligatures          ; replace bits of code with pretty symbols
         +hasklig)
        ;;tabs              ; an tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
@@ -76,10 +76,13 @@
        ;;term              ; terminals in Emacs
        vterm               ; another terminals in Emacs
 
+       :os
+       macos               ; MacOS-specific commands
+
        :tools
        ;;ansible
-       (debugger           ; FIXME stepping through code, to help you add bugs
-        +lsp)
+       ;; (debugger           ; FIXME stepping through code, to help you add bugs
+       ;; +lsp)
        ;;direnv
        ;;docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
@@ -89,8 +92,8 @@
        (lookup             ; helps you navigate your code and documentation
         +docsets)          ; ...or in Dash docsets locally
        lsp
-       macos               ; MacOS-specific commands
-       magit               ; a git porcelain for Emacs
+       (magit              ; a git porcelain for Emacs
+        +forge)
        make                ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        pdf                 ; pdf enhancements

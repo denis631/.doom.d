@@ -16,6 +16,7 @@
 (package! thrift)
 (package! restclient)
 (package! llvm-mode :recipe (:local-repo "lang/llvm"))
+(package! promela-mode :recipe (:local-repo "lang/promela"))
 (package! yaml-mode)
 
 ;; misc
