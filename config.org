@@ -6,17 +6,21 @@
   - [[#lightdark-theme][light/dark theme]]
 - [[#programming][Programming]]
   - [[#lsp][LSP]]
-  - [[#rust][Rust]]
 - [[#org][Org]]
+  - [[#font][font]]
+  - [[#capture-templates][capture templates]]
   - [[#core][core]]
   - [[#fancy-priorities][fancy priorities]]
   - [[#hook][hook]]
   - [[#misc][misc]]
 - [[#navigation][Navigation]]
+  - [[#dired][dired]]
   - [[#evil][evil]]
   - [[#counsel][counsel]]
   - [[#ivy][ivy]]
+  - [[#scroll-on-jump][scroll-on-jump]]
 - [[#misc-1][Misc]]
+  - [[#server][server]]
   - [[#remove-red-highlighting-after-80-chars][remove red highlighting after 80 chars]]
   - [[#super-save][super-save]]
   - [[#vterm][vterm]]
@@ -30,10 +34,15 @@
 ** doom properties
 #+BEGIN_SRC elisp
 (setq doom-theme 'chocolate
-      doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 13)
+      doom-font (font-spec :family "Hasklig" :weight 'semi-bold :size 14)
       display-line-numbers-type nil
       evil-respect-visual-line-mode t)
+
 (add-to-list 'default-frame-alist '(alpha . 95))
+
+(global-whitespace-mode)
+
+(setq smie--parent nil)
 #+END_SRC
 ** light/dark theme
 #+BEGIN_SRC elisp
@@ -42,8 +51,8 @@
 (defun adjust-color-theme-to-os-theme ()
   (interactive)
   (let ((expected-theme (if (string= (string-trim (shell-command-to-string is-dark-mode-applescript)) "true")
-                           'doom-nord
-                           'chocolate)))
+                            'chocolate
+                          'doom-ayu-light)))
     (unless (string= doom-theme expected-theme)
       (load-theme expected-theme t)
       (doom/reload-theme))))
@@ -57,35 +66,40 @@
 (after! lsp
   (setq lsp-eldoc-enable-hover nil))
 #+END_SRC
-** Rust
-#+BEGIN_SRC elisp
-(use-package! toml-mode)
-(use-package! rust-mode
-  :hook (rust-mode . lsp))
-
-(after! rustic
-  (setq rustic-format-on-save t))
-#+END_SRC
 * Org
-** core
-#+BEGIN_SRC elisp
-(setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Notes/")
+** font
+#+begin_src elisp
+(defun denis631/org-font-setup ()
+  ;; Replace list hyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-(after! org
-  (setq org-fontify-done-headline t)
+  ;; Set faces for heading levels
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "Consolas" :weight 'regular :height (cdr face)))
 
-  ;; latex-size increase
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
-
-  (setq org-tags-column -120)
-
-  ;; workflow
-  (setq org-todo-keywords '((sequence "PROJ(P)" "HOLD(H)" "|" "DONE(d)") ;; project
-                            (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "DONE(d)") ;; items in scrum sprint
-                            (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
-
-  ;; org-capture
-  (setq private-todo-path (concat org-directory "todo.org")
+  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+#+end_src
+** capture templates
+#+begin_src elisp
+(defun denis631/org-capture-setup ()
+  (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Notes/"
+        private-todo-path (concat org-directory "todo.org")
         private-notes-path (concat org-directory "note.org")
         work-todo-path (concat org-directory "work-todo.org")
         work-journal-path (concat org-directory "work-journal.org"))
@@ -106,19 +120,33 @@
           ("w" "Templates for work")
           ("wt" "Work todo" entry (file+headline work-todo-path "Tasks")
            "* TODO %?")
-          ("wl" "Work todo with link" entry (file+headline work-todo-path "Tasks")
-           "* TODO %?\n%a")
-          ("wq" "Work question" entry (file+headline work-todo-path "Tasks")
+          ("w?" "Work question" entry (file+headline work-todo-path "Tasks")
            "* [?] %?")
-          ("wql" "Work question with link" entry (file+headline work-todo-path "Tasks")
-           "* [?] %?\n%a")
           ("wj" "Work Journal" entry (file+datetree work-journal-path)
-           "* %U %?\n%i\n")))
+           "* %U %?\n%i\n"))))
+#+end_src
+** core
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-fontify-done-headline t)
+
+  ;; latex-size increase
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+  (setq org-tags-column -120)
+
+  ;; workflow
+  (setq org-todo-keywords '((sequence "PROJ(P)" "HOLD(H)" "|" "DONE(d)") ;; project
+                            (sequence "TODO(t)" "|" "IN PROGRESS(p)" "|" "IN REVIEW(r)" "|" "DONE(d)") ;; items in scrum sprint
+                            (sequence "[ ](T)" "[?](Q)" "|" "[X](D)"))) ;; simple todos
 
   (set-pretty-symbols!
     'org-mode :alist '(("[ ]" . ?☐)
                        ("[X]" . ?☑)
-                       ("[-]" . ?❍))))
+                       ("[-]" . ?❍)))
+
+  (denis631/org-font-setup)
+  (denis631/org-capture-setup))
 #+END_SRC
 ** fancy priorities
 #+BEGIN_SRC elisp
@@ -148,12 +176,16 @@
 (setq doom-scratch-buffer-major-mode 'org-mode)
 #+END_SRC
 * Navigation
+** dired
+#+begin_src elisp
+(after! dired
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-up-directory
+    "l" 'dired-find-file))
+#+end_src
 ** evil
 #+BEGIN_SRC elisp
 (after! evil
-  (advice-add #'evil-next-line :after #'evil-scroll-line-to-center)
-  (advice-add #'evil-previous-line :after #'evil-scroll-line-to-center)
-
   ;; use dvorak keys instead
   (setq evil-escape-key-sequence "hk")
 
@@ -180,7 +212,34 @@
         ivy-posframe-parameters `((min-width . ,ivy-posframe-width)
                                   (min-height . ,ivy-height))))
 #+END_SRC
+** scroll-on-jump
+#+begin_src elisp
+(use-package! scroll-on-jump
+  :config
+  (setq scroll-on-jump-duration 0.6)
+
+  (with-eval-after-load 'evil
+    (scroll-on-jump-advice-add evil-undo)
+    (scroll-on-jump-advice-add evil-redo)
+    (scroll-on-jump-advice-add evil-jump-item)
+    (scroll-on-jump-advice-add evil-jump-forward)
+    (scroll-on-jump-advice-add evil-jump-backward)
+    (scroll-on-jump-advice-add evil-ex-search-next)
+    (scroll-on-jump-advice-add evil-ex-search-previous)
+    (scroll-on-jump-advice-add evil-forward-paragraph)
+    (scroll-on-jump-advice-add evil-backward-paragraph))
+
+  (with-eval-after-load 'goto-chg
+    (scroll-on-jump-advice-add goto-last-change)
+    (scroll-on-jump-advice-add goto-last-change-reverse)))
+#+end_src
 * Misc
+** server
+#+begin_src elisp
+(after! server
+  (when (not (server-running-p))
+    (server-start)))
+#+end_src
 ** remove red highlighting after 80 chars
 #+BEGIN_SRC elisp
 (delq! 'lines-tail whitespace-style)

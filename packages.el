@@ -10,10 +10,9 @@
 (package! org-fancy-priorities)
 (package! autothemer)
 (package! chocolate :recipe (:local-repo "ui"))
+(package! scroll-on-jump :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 
 ;; programming
-(package! toml-mode)
-(package! thrift)
 (package! restclient)
 (package! llvm-mode :recipe (:local-repo "lang/llvm"))
 (package! promela-mode :recipe (:local-repo "lang/promela"))
